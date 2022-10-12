@@ -77,11 +77,7 @@ The user should be able to see the list of tasks, add new ones, delete existing 
 
     <button onclick="removeFirst()">Remove First Task</button>
 
-    <ul id="myTaskList">
-      <li>banana</li>
-      <li>orange</li>
-      <li>apple</li>
-    </ul>
+    <ul id="myTaskList"></ul>
 
     <hr />
 
@@ -90,7 +86,7 @@ The user should be able to see the list of tasks, add new ones, delete existing 
 
     <hr />
 
-    <input type="button" value="Sort" onclick="bubbleSort()" />
+    <input type="button" value="Sort" />
 
     <script>
       /* EXERCISE 5:
@@ -120,15 +116,17 @@ The user should be able to see the list of tasks, add new ones, delete existing 
 
       inputTextNode.addEventListener("input", getInputContent);
 
-      const ulItem = document.getElementById("myTaskList");
+      let ulItem = document.getElementById("myTaskList");
 
       addNewTaskButton.addEventListener("click", () => {
         if (inputText) {
           const newLi = document.createElement("li");
+
           const text = inputText;
           newLi.innerText = text;
+          let newLiTask = ulItem.appendChild(newLi);
 
-          ulItem.appendChild(newLi);
+          newLiTask.addEventListener("click", newLiTask.remove);
         }
 
         inputTextNode.value = "";
@@ -139,15 +137,14 @@ The user should be able to see the list of tasks, add new ones, delete existing 
                   Create a function "removeLast" which removes the last item from the task list
               */
 
-      const liList = document.getElementsByTagName("li");
-      const liListLength = liList.length;
+      let liList = document.getElementsByTagName("li");
+      let liListLength = liList.length;
 
       let firstLiNode = liList[0];
-      let lastLiNode = liList[liListLength - 1];
 
       const removeLast = function () {
-        lastLiNode = liList[liListLength - 1];
-        if (lastLiNode) ulItem.removeChild(lastLiNode);
+        ulItem = document.getElementById("myTaskList");
+        ulItem.lastChild.remove();
       };
 
       /* EXERCISE 7:
@@ -165,12 +162,13 @@ The user should be able to see the list of tasks, add new ones, delete existing 
 
       const getTasksAsArray = function () {
         let myTasks = [];
-
+        liList = document.getElementsByTagName("li");
         for (let node of liList) {
           if (node) {
             myTasks.push(node.innerText);
           }
         }
+        // console.log(myTasks);
         return myTasks;
       };
 
@@ -206,14 +204,7 @@ The user should be able to see the list of tasks, add new ones, delete existing 
                   Attach an eventListener to each new task you create. When the task receives the click it should be removed (only the clicked task should disappear)
         */
 
-      for (let i = 0; i < liList.length; i++) {
-        let node = liList[i];
-        if (node) {
-          node.addEventListener("click", () => {
-            ulItem.removeChild(node);
-          });
-        }
-      }
+      ////SOLUTION AT EXERCISE 5, INSIDE THE FUNCTION
 
       /* EXERCISE 11:
                  Create a function "bubbleSort()" which sorts the task list alphabetically using the bubble sort algorithm
@@ -233,6 +224,15 @@ The user should be able to see the list of tasks, add new ones, delete existing 
           liList[i].innerText = theArray[i];
         }
       };
+
+      let sortTaskButton = "";
+
+      for (let node of inputList)
+        if (node.value === "Sort") {
+          sortTaskButton = node;
+        }
+
+      sortTaskButton.addEventListener("click", bubbleSort);
 
       /* #### Suggestion:
          - Break the code into many function for semplicity
